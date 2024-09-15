@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WinstonModule } from 'nest-winston';
+
+import winstonConfig from './config/winston.config';
 
 @Module({
   imports: [
@@ -22,6 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         synchronize: true, // 개발 환경에서만 true로 설정
       }),
     }),
+    WinstonModule.forRoot(winstonConfig),
   ],
 })
 export class AppModule {}
