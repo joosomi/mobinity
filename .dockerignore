@@ -1,0 +1,20 @@
+# node_modules 디렉토리 제외 (이미 설치된 의존성은 Docker 이미지에 필요 없음)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Git 관련 파일 제외
+.git
+.gitignore
+
+# 빌드된 파일이나 배포 시 필요하지 않은 디렉토리 제외
+dist
+build
+
+# 환경 설정 파일 제외 (환경 변수를 통해 설정하는 것이 권장됨)
+.env
+
+# Docker 관련 파일 제외
+.dockerignore
+Dockerfile
+docker-compose.yml
