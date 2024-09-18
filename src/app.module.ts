@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 
 import winstonConfig from './config/winston.config';
+import DatabaseSeeder from './db/seeds/seeder';
 import { Brand } from './entities/brand.entity';
 import { DiscountDaysOfWeek } from './entities/discount-days-of-week.entity';
 import { DiscountPolicy } from './entities/discount-policy.entity';
@@ -30,6 +31,7 @@ import { User } from './entities/user.entity';
         database: configService.get<string>('POSTGRES_DB'),
         autoLoadEntities: true,
         synchronize: true, // 개발 환경에서만 true로 설정
+        // dropSchema: true, // 매번 스키마를 삭제하고 새로 생성
         logging: true, // 개발환경에서만 true
       }),
     }),
@@ -45,5 +47,6 @@ import { User } from './entities/user.entity';
     ]),
     WinstonModule.forRoot(winstonConfig),
   ],
+  providers: [DatabaseSeeder],
 })
 export class AppModule {}

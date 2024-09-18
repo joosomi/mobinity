@@ -4,7 +4,7 @@ import { Entity, Column, BeforeInsert, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { UserType } from './user-type.entity';
 
-@Entity()
+@Entity('users')
 export class User extends BaseEntity {
   private static readonly saltRounds = 10;
 
