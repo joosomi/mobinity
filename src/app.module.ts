@@ -4,6 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 
 import winstonConfig from './config/winston.config';
+import { Brand } from './entities/brand.entity';
+import { DiscountDaysOfWeek } from './entities/discount-days-of-week.entity';
+import { DiscountPolicy } from './entities/discount-policy.entity';
+import { Product } from './entities/product.entity';
+import { UserTypeProductPrice } from './entities/user-type-product-price.entity';
+import { UserType } from './entities/user-type.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
@@ -23,8 +30,19 @@ import winstonConfig from './config/winston.config';
         database: configService.get<string>('POSTGRES_DB'),
         autoLoadEntities: true,
         synchronize: true, // 개발 환경에서만 true로 설정
+        logging: true, // 개발환경에서만 true
       }),
     }),
+    // FIXME: 테이블 생성을 위한 것으로 추후 삭제
+    TypeOrmModule.forFeature([
+      User,
+      UserType,
+      Product,
+      Brand,
+      UserTypeProductPrice,
+      DiscountPolicy,
+      DiscountDaysOfWeek,
+    ]),
     WinstonModule.forRoot(winstonConfig),
   ],
 })
