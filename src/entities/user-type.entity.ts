@@ -10,4 +10,7 @@ export class UserType extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   description?: string;
+
+  @Column({ default: false })
+  isDefault: boolean;
 }

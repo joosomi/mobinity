@@ -33,8 +33,12 @@ export class DatabaseSeeder {
   async seed(count: number): Promise<void> {
     // UserType 시딩
     const userTypeNames = ['BRONZE', 'SILVER', 'GOLD', 'VIP'];
-    for (const type of userTypeNames) {
-      await this.userTypeRepository.save({ name: type });
+    for (const [index, type] of userTypeNames.entries()) {
+      await this.userTypeRepository.save({
+        name: type,
+        description: `${type} user type`,
+        isDefault: index === 0, // BRONZE를 기본 타입으로 설정
+      });
     }
 
     const userTypes = await this.userTypeRepository.find(); // UserType 엔티티 가져오기
@@ -42,7 +46,7 @@ export class DatabaseSeeder {
     // Brand 시딩
     for (let i = 0; i < count; i++) {
       await this.brandRepository.save({
-        krName: `회사${i + 1}`, // 임의의 한국어 회사 이름 생성
+        krName: `회사 ${i + 1}`, // 임의의 한국어 회사 이름 생성
         enName: faker.company.name(),
       });
     }
@@ -99,7 +103,7 @@ export class DatabaseSeeder {
       const user = new User(); // User 객체 생성
       user.username = faker.internet.userName();
       user.email = faker.internet.email();
-      user.password = process.env.DEFAULT_USER_PASSWORD; // 환경 변수에서 비밀번호 가져오기
+      user.password = process.env.DEFAULT_USER_PASSWORD || 'password'; // 환경 변수에서 비밀번호 가져오기
       user.userType = randomUserType;
 
       await user.hashPassword(); // 비밀번호 해시 처리
