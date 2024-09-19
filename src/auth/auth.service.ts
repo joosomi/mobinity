@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { LoginDto } from '../users/dto/login.dto';
 
+import { JwtPayload } from './types/jwt.type';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -37,7 +39,7 @@ export class AuthService {
     }
 
     // 액세스 토큰 생성
-    const payload = { sub: user.id, username: user.username, email: user.email };
+    const payload: JwtPayload = { sub: user.id, username: user.username, email: user.email };
 
     const accessToken = this.jwtService.sign(payload);
 

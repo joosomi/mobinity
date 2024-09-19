@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from '../auth/auth.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
@@ -20,6 +21,7 @@ export class UsersController {
    * @param createUserDto
    * @returns void
    */
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.NO_CONTENT) //204
   @ApiOperation({
@@ -50,6 +52,7 @@ export class UsersController {
    * @param loginDto
    * @returns accessToken
    */
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
