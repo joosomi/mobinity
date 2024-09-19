@@ -42,7 +42,7 @@ export class DatabaseSeeder {
     // Brand 시딩
     for (let i = 0; i < count; i++) {
       await this.brandRepository.save({
-        krName: `회사 ${i + 1}`, // 임의의 한국어 회사 이름 생성
+        krName: `회사${i + 1}`, // 임의의 한국어 회사 이름 생성
         enName: faker.company.name(),
       });
     }
