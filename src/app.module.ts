@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import winstonConfig from './config/winston.config';
 import DatabaseSeeder from './db/seeds/seeder';
 import { Brand } from './entities/brand.entity';
@@ -12,6 +15,7 @@ import { Product } from './entities/product.entity';
 import { UserTypeProductPrice } from './entities/user-type-product-price.entity';
 import { UserType } from './entities/user-type.entity';
 import { User } from './entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -46,7 +50,15 @@ import { User } from './entities/user.entity';
       DiscountDaysOfWeek,
     ]),
     WinstonModule.forRoot(winstonConfig),
+    UsersModule,
+    AuthModule,
   ],
-  providers: [DatabaseSeeder],
+  providers: [
+    DatabaseSeeder,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

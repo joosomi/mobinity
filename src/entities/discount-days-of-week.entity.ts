@@ -11,8 +11,8 @@ export class DiscountDaysOfWeek extends BaseEntity {
   discountPolicy: DiscountPolicy;
 
   @Column({ type: 'int' })
-  dayOfWeek: number;
+  dayOfWeek: number; // 요일 (0: 일요일, 1: 월요일 ... 6: 토요일)
 
   @Column({ type: 'decimal', precision: 5, scale: 2 })
-  additionalDiscountRate: number; //추가 할인율
+  additionalDiscountRate: number; // 요일별 추가 할인율
 }
