@@ -42,7 +42,7 @@ export class UsersController {
     status: 404,
     description: 'default UserType을 찾지 못하여 회원가입이 불가능한 경우.',
   }) // 404 Not Found 에러
-  @ApiResponse({ status: 409, description: '이미 존재하는 계정명, 이메일로 가입 시도' }) // 409 Conflict 에러
+  @ApiResponse({ status: 409, description: '이미 존재하는 계정명, 이메일로 가입을 시도하는 경우' }) // 409 Conflict 에러
   async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
     return this.usersService.createUser(createUserDto);
   }
