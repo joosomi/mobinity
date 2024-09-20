@@ -28,7 +28,7 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
     //클라이언트에게 응답할 에러 Response
     const errorResponse = {
       statusCode: status,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }), // 한국 시간으로 변환
       path: request.url,
       message,
     };

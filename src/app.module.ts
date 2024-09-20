@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 
+import { AuthModule } from './auth/auth.module';
 import winstonConfig from './config/winston.config';
 import DatabaseSeeder from './db/seeds/seeder';
 import { Brand } from './entities/brand.entity';
@@ -12,6 +13,8 @@ import { Product } from './entities/product.entity';
 import { UserTypeProductPrice } from './entities/user-type-product-price.entity';
 import { UserType } from './entities/user-type.entity';
 import { User } from './entities/user.entity';
+import { ProductsModule } from './products/products.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { User } from './entities/user.entity';
         autoLoadEntities: true,
         synchronize: true, // 개발 환경에서만 true로 설정
         // dropSchema: true, // 매번 스키마를 삭제하고 새로 생성
-        logging: true, // 개발환경에서만 true
+        // logging: false, // 개발환경에서만 true
       }),
     }),
     // FIXME: 테이블 생성을 위한 것으로 추후 삭제
@@ -46,6 +49,9 @@ import { User } from './entities/user.entity';
       DiscountDaysOfWeek,
     ]),
     WinstonModule.forRoot(winstonConfig),
+    UsersModule,
+    AuthModule,
+    ProductsModule,
   ],
   providers: [DatabaseSeeder],
 })

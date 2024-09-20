@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { config } from 'dotenv';
+// eslint-disable-next-line import/named
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 import { AppModule } from '../app.module';
