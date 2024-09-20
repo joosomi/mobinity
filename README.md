@@ -1,16 +1,38 @@
-# Mobinity
 
-개발 기간: 2024.09.12 ~ 2024.09.20
+## 📑 목차
+- [🚀 Quick Start - 서버 구동 가이드](#quick-start---서버-구동-가이드)
+- [🐳 Docker 실행 가이드](#docker-실행-가이드)
+- [🔧 서버 구동 가이드](#서버-구동-가이드)
+- [🗺️ ERD](#erd)
+- [📖 API Swagger 문서](#api-swagger-문서)
+- [🗂️ 디렉토리 구조](#디렉토리-구조)
 
-### 개발 환경
+<br/>
+  
+
+# 🛍️ Mobinity API
+동적 할인 정책과 사용자 맞춤 가격을 제공하는 상품 조회 REST API 개인 프로젝트입니다. <br>
+요일별 할인 정책과 사용자 유형별 가격 설정을 통해 맞춤형 쇼핑 경험을 제공하는 것을 목표로 설계되었습니다.
+
+#### 📅 개발 기간
+2024.09.12 ~ 2024.09.20
+
+#### 🛠️ 개발 환경
 
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white) ![TypeORM](https://img.shields.io/badge/TypeORM-262627?style=for-the-badge&logo=typeorm&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
----
+<br/>
+
+-----
 
 ## Quick Start - 서버 구동 가이드
 
-### 환경 변수 설정 (.env 파일)
+### 🛒 프로젝트 클론 
+```
+git clone https://github.com/joosomi/mobinity.git
+```
+
+###  ⚙️ 환경 변수 설정 (.env 파일)
 
 프로젝트 루트 디렉토리에 `.env` 파일을 생성하고, 다음과 같은 환경 변수를 설정하세요:
 
@@ -23,7 +45,7 @@ APP_PORT=         # 애플리케이션이 실행될 포트
 POSTGRES_USER=               # PostgreSQL 사용자 이름
 POSTGRES_PASSWORD=           # PostgreSQL 사용자 비밀번호
 POSTGRES_DB=                 # 사용할 데이터베이스 이름
-POSTGRES_HOST=               # 데이터베이스 호스트 (개발환경 : localhost, 배포 환경: 도커 서비스 이름 설정 가능)
+POSTGRES_HOST=localhost      # 데이터베이스 호스트 (개발환경 : localhost, 배포 환경: 도커 서비스 이름 설정 가능)
 POSTGRES_PORT=               # PostgreSQL 데이터베이스 포트
 
 #DB seeding) 사용자 비밀번호
@@ -32,18 +54,19 @@ DEFAULT_USER_PASSWORD=
 #JWT secret key
 JWT_SECRET=
 ```
+<br/>
 
----
+-------
 
-### Docker 실행 가이드
+## Docker 실행 가이드
 
 프로젝트의 데이터베이스 서비스를 Docker로 실행하려면, 아래 단계를 따르세요.
 
-### 1. Docker Compose 설정 확인
+#### 1. Docker Compose 설정 확인
 
 루트 디렉토리에 있는 `docker-compose.yml` 파일을 확인하고, `.env` 파일이 제대로 설정되었는지 확인하세요.
 
-### 2. Docker 컨테이너 실행
+#### 2. Docker 컨테이너 실행
 
 아래 명령어를 사용하여 Docker 컨테이너를 백그라운드에서 실행합니다:
 
@@ -52,7 +75,15 @@ docker-compose up -d
 ```
 
 - image: postgres:15.7 버전의 PostgreSQL을 사용합니다.
-- `db-init.sh` 스크립트: Docker로 PostgreSQL 컨테이너가 처음 실행될 때 자동으로 실행됩니다. 데이터베이스를 생성하고, 환경변수로 설정한 이름과 비밀번호로 사용자 생성 및 권한을 부여합니다.
+- `db-init.sh` 스크립트: Docker로 PostgreSQL 컨테이너가 처음 실행될 때 자동으로 실행됩니다. <br>
+    데이터베이스를 생성하고, 환경변수로 설정한 이름, 비밀번호의 사용자 생성 및 권한을 부여합니다.
+
+
+#### 3.	Docker 컨테이너 상태 확인
+```
+docker ps
+```
+실행 중인 컨테이너 목록에서 PostgreSQL 컨테이너가 정상적으로 실행되고 있는지 확인합니다.
 
 ---
 
@@ -93,21 +124,24 @@ npm run start
 ```
 npm run start:dev
 ```
+<br/>
 
 ---
 
-## ERD 다이어그램
+## ERD
 
 ![ERD 다이어그램](/docs/erd.png)
 
 - `user_type` 테이블: 새로운 사용자 유형이 추가될 때를 대비해 따로 테이블을 두었습니다.
 - `user_types_product_price`: 사용자 유형별로 상품 가격을 설정하는 테이블입니다.여기서 가격 정보가 없을 경우 product 테이블의 기본 가격(basePrice)을 사용하여 할인된 가격을 계산하게 됩니다.
-- `discount_policy(기본 할인 정책)` 및 `discount_days_of_week(요일별 추가 할인)`: 현재는 요일별 추가 할인을 기본 할인 정책에 추가 할인을 적용하는 방식으로 설계되었습니다.
+- `discount_policy(기본 할인 정책)` 및 `discount_days_of_week(요일별 추가 할인)`: 현재는 요일별 추가 할인을 기본 할인 정책에 추가 할인을 적용하는 방식으로 설계되었습니다. <br>
   향후 사용자 유형(UserType), 브랜드(Brand), 상품(Product) 등 다양한 조건에 맞춘 할인 정책을 추가 테이블로 확장하여 관리할 수 있도록 설계했습니다.
+
+<br/>
 
 ---
 
-## API Swagger 문서화
+## API Swagger 문서
 
 Swagger 문서를 통해 API 명세를 확인할 수 있습니다.
 API 요청을 테스트하고, 각 엔드포인트의 상세 정보를 확인할 수 있습니다.
@@ -120,7 +154,7 @@ http://localhost:<APP_PORT>/api-docs
 ![Swagger](/docs/swagger.png)
 
 <details>
-  <summary>API 명세서</summary>
+  <summary>📝 API 명세서 보기</summary>
 
 ### 1.1 회원가입
 
@@ -298,12 +332,17 @@ GET /api/products/brand
 http://localhost:<APP_PORT>/api/products/brand?brandName=%ED%9A%8C%EC%82%AC%202&page=1&limit=10
 
 ```
+</details>
 
-## </details>
+<br/>
 
 ---
+## 디렉토리 구조
 
-### 디렉토리 구조
+<details>
+   <summary>디렉토리 구조 보기</summary>
+
+  
 ```
 ...
 ├── logs
@@ -372,3 +411,4 @@ http://localhost:<APP_PORT>/api/products/brand?brandName=%ED%9A%8C%EC%82%AC%202&
 ├── tsconfig.build.json
 └── tsconfig.json
 ```
+</details>
