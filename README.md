@@ -304,8 +304,7 @@ http://localhost:<APP_PORT>/api/products/brand?brandName=%ED%9A%8C%EC%82%AC%202&
 ---
 
 ### 디렉토리 구조
-
-```json
+```
 ...
 ├── logs
 │   ├── combined.log
