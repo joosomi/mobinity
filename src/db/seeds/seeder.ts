@@ -48,6 +48,7 @@ export class DatabaseSeeder {
       await this.brandRepository.save({
         krName: `회사 ${i + 1}`, // 임의의 한국어 회사 이름 생성
         enName: faker.company.name(),
+        description: faker.company.catchPhrase(),
       });
     }
 
