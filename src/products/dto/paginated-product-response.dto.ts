@@ -9,11 +9,11 @@ export class ProductResponseDto {
   id: string;
   name: string;
   description?: string;
-  basePrice?: number;
-  userTypePrice?: number;
-  finalPrice?: number;
-  totalDiscountRate?: number;
-  brand: BrandDto;
+  basePrice?: number; //기본 상품 가격
+  userTypePrice?: number; //사용자 유형별 가격
+  finalPrice?: number; //할인된 금액
+  totalDiscountRate?: number; //전체 할인율
+  brand: BrandDto; //브랜드 정보 dto
 }
 
 export class PaginationInfoDto {

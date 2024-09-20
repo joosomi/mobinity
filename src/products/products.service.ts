@@ -8,6 +8,11 @@ import { Product } from '../entities/product.entity';
 import { UserTypeProductPrice } from '../entities/user-type-product-price.entity';
 import { UserType } from '../entities/user-type.entity';
 
+import {
+  BrandProductResponseDto,
+  PaginatedBrandProductResponseDto,
+} from './dto/brand-product-response.dto';
+import { GetBrandProductsDto } from './dto/get-brand-products.dto';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import {
   PaginatedProductResponseDto,
@@ -141,6 +146,79 @@ export class ProductsService {
       basePrice: product.basePrice,
       userTypePrice: userPrice ? userPrice.price : undefined,
       finalPrice,
+      totalDiscountRate,
+    };
+  }
+
+  /**
+   * 브랜드별 상품 목록 조회 및 페이지네이션 response 반환
+   * @param getBrandProductsDto
+   * @returns <PaginatedBrandProductResponseDto>
+   */
+  async getBrandProducts(
+    getBrandProductsDto: GetBrandProductsDto,
+  ): Promise<PaginatedBrandProductResponseDto> {
+    const { brandName, page = 1, limit = 10 } = getBrandProductsDto;
+    const skip = (page - 1) * limit; // 건너뛸 항목의 수
+
+    //브랜드 이름 검색(한글 또는 영어)
+    //상품 목록, 상품의 전체 개수 조회
+    const [products, total] = await this.productRepo.findAndCount({
+      where: [{ brand: { krName: brandName } }, { brand: { enName: brandName } }],
+      relations: ['brand'],
+      skip,
+      take: limit,
+    });
+
+    const [baseDiscountRate, additionalDiscount] = await this.getDiscountRates();
+
+    const productDtos: BrandProductResponseDto[] = products.map((product) =>
+      this.createBrandProductResponseDto(product, additionalDiscount, baseDiscountRate),
+    );
+
+    return {
+      products: productDtos,
+      pagination: {
+        totalCount: total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        limit,
+      },
+    };
+  }
+
+  /**
+   * 브랜드별 상품 response DTO
+   * @param product
+   * @param additionalDiscount
+   * @param baseDiscountRate
+   * @returns  BrandProductResponseDto
+   */
+  private createBrandProductResponseDto(
+    product: Product,
+    additionalDiscount: number,
+    baseDiscountRate: number,
+  ): BrandProductResponseDto {
+    //최종 할인율(maxDiscount와 비교하여 계산)
+    const totalDiscountRate = Math.min(
+      product.maxDiscountRate,
+      baseDiscountRate + additionalDiscount,
+    );
+
+    const discountAmount = Math.round((product.basePrice * totalDiscountRate) / 100);
+    const finalPrice = product.basePrice - discountAmount; //할인가
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      brand: {
+        id: product.brand.id,
+        krName: product.brand.krName,
+        enName: product.brand.enName,
+      },
+      basePrice: product.basePrice, //기본 가격(할인x)
+      finalPrice, // 최종 가격 (할인 적용)
       totalDiscountRate,
     };
   }
