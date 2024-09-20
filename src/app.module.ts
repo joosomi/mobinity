@@ -35,7 +35,7 @@ import { UsersModule } from './users/users.module';
         autoLoadEntities: true,
         synchronize: true, // 개발 환경에서만 true로 설정
         // dropSchema: true, // 매번 스키마를 삭제하고 새로 생성
-        logging: true, // 개발환경에서만 true
+        logging: false, // 개발환경에서만 true
       }),
     }),
     // FIXME: 테이블 생성을 위한 것으로 추후 삭제

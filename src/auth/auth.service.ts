@@ -39,7 +39,11 @@ export class AuthService {
     }
 
     // 액세스 토큰 생성
-    const payload: JwtPayload = { sub: user.id, username: user.username, email: user.email };
+    const payload: JwtPayload = {
+      sub: user.id,
+      username: user.username,
+      email: user.email,
+    };
 
     const accessToken = this.jwtService.sign(payload);
 
